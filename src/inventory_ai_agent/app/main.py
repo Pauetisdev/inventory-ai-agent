@@ -1,6 +1,5 @@
 from fastapi import FastAPI
-import inventory_ai_agent.app.core
-from inventory_ai_agent.app.api import router as agent_router
+from inventory_ai_agent.app.api import agent_router
 
 app = FastAPI(
     title="Inventory AI Agent",

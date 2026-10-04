@@ -2,59 +2,69 @@ from fastapi import APIRouter, HTTPException
 from typing import List
 from pydantic import BaseModel, Field
 from fastapi import HTTPException
-from inventory_ai_agent.app.agent import agent
+from inventory_ai_agent.app.ai.agent import agent
 from langchain_core.runnables import RunnableConfig
-from inventory_ai_agent.app.db import clothes_collection
-from inventory_ai_agent.app.models.clothing import ClothingItemCreate, ClothingItemResponse
-
-
-inventory_router = APIRouter(prefix="/inventory", tags=["Inventory"])
-
-@inventory_router.post("/clothes", response_model=ClothingItemResponse, status_code=201)
-async def create_clothing(item: ClothingItemCreate):
-    # un cop validat passar a dict
-    item_dict = item.model_dump()
-    
-    # Guardem a MongoDB
-    result = await clothes_collection.insert_one(item_dict)
-    
-    created_item = await clothes_collection.find_one({"_id": result.inserted_id})
-    if created_item:
-        created_item["_id"] = str(created_item["_id"]) 
-        return created_item # tornem el dict amb id pasat a str
-        
-    raise HTTPException(status_code=500, detail="Error al crear l'article")
-
-@inventory_router.get("/clothes", response_model=List[ClothingItemResponse])
-async def get_all_clothes():
-    clothes = []
-
-    async for document in clothes_collection.find({}):
-        document["_id"] = str(document["_id"])
-        clothes.append(document)
-    return clothes
+from inventory_ai_agent.app.config.db import clothes_collection
+from inventory_ai_agent.app.models.stock import ClothingItem
+from inventory_ai_agent.app.models.requests import ChatRequest, ApproveRequest
 
 
 agent_router = APIRouter(prefix="/agent", tags=["AI Agent"])
 
-class ChatRequest(BaseModel):
-    message: str = Field(..., description="The user prompt or command for the inventory agent")
-    thread_id: str = Field(default="default_thread", description="Unique thread identifier for conversation memory")
 
 @agent_router.post("/chat")
 async def chat_with_agent(payload: ChatRequest):
     try:
-        
         config: RunnableConfig = {"configurable": {"thread_id": payload.thread_id}}
         
-        response = agent.invoke(
+        # crida async
+        response = await agent.ainvoke(
             {"messages": [{"role": "user", "content": payload.message}]},
+            config=config
+        )
+        
+        state = await agent.aget_state(config)
+
+        # Comprovar que l'execució està pausada.
+        if state.next:
+            return {
+                "thread_id": payload.thread_id,
+                "status": "pending_human_approval",
+                "message": "The agent has stopped. Manual approval is required to sell/remove the item.",
+                "pending_action": state.next[0] # Aquí ens dirà quina eina està bloquejada
+            }
+
+        ai_message = response["messages"][-1].content
+        return {
+            "thread_id": payload.thread_id,
+            "status": "completed",
+            "response": ai_message
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@agent_router.post("/approve")
+async def approve_agent_action(payload: ApproveRequest):
+    try:
+        config: RunnableConfig = {"configurable": {"thread_id": payload.thread_id}}
+        
+        state = await agent.aget_state(config)
+        if not state.next:
+            raise HTTPException(
+                status_code=400, 
+                detail="Aquest fil no té cap acció pendent d'aprovació."
+            )
+            
+        response = await agent.ainvoke(
+            {"messages": [{"role": "user", "content": payload.decision}]},
             config=config
         )
         
         ai_message = response["messages"][-1].content
         return {
             "thread_id": payload.thread_id,
+            "status": "completed",
             "response": ai_message
         }
         
