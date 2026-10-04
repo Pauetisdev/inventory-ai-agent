@@ -5,6 +5,7 @@ class Settings(BaseSettings):
 
     #variables obligatories d'entorn
     openai_api_key: str
+    mongo_uri: str
     
     # fail-fast si hi ha variables d'entorn que no estan definides
     model_config = SettingsConfigDict(
