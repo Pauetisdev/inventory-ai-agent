@@ -52,10 +52,8 @@ async def approve_agent_action(payload: ApproveRequest):
                 detail="Aquest fil no té cap acció pendent d'aprovació."
             )
 
-        response = await agent.ainvoke(
-            {"messages": [{"role": "user", "content": payload.decision}]},
-            config=config
-        )
+        # Rependre l'execució
+        response = await agent.ainvoke(None, config=config)
 
         structured_data = response.get("structured_response")
         return {

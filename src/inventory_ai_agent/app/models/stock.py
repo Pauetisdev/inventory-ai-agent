@@ -2,23 +2,24 @@ from pydantic import BaseModel, Field
 from enum import Enum
 
 class CategoryEnum(str, Enum):
-    T_SHIRT = "T-Shirt"
-    TROUSERS = "Trousers"
-    COAT = "Coat"
-    SHOES = "Shoes"
-    ACCESSORY = "Accessory"
+    SABATES = "Sabates"
+    SAMARRETA = "Samarreta"
+    SUDADERA = "Sudadera"
+    PANTALONS = "Pantalons"
+    JAQUETA = "Jaqueta"
+    ACCESSORI = "Accessori"
 
 class ConditionEnum(str, Enum):
-    EXCELLENT = "Excellent"
-    VERY_GOOD = "Very Good"
-    GOOD = "Good"
-    FAIR = "Fair"
+    NOU = "Nou"
+    MOLT_BO = "Molt bo"
+    BO = "Bo"
+    ACCEPTABLE = "Acceptable"
 
 
 class ClothingItem(BaseModel):
     name: str = Field(..., description="Specific name of the item")
     category: CategoryEnum
-    bradn: str
+    brand: str
     size:str
     condition: ConditionEnum
     price: float

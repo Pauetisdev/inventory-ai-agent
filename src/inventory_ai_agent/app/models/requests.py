@@ -5,8 +5,8 @@ class ChatRequest(BaseModel):
     thread_id: str = Field(default="default_thread", description="Unique thread identifier for conversation memory")
 
 class ApproveRequest(BaseModel):
-    thread_id: str = Field(..., description="The ID of the conversation thread that is paused")
     decision: str = Field(..., description="The human decision: 'approve' to confirm, 'reject' to cancel.")
+    thread_id: str = Field(..., description="The ID of the conversation thread that is paused")
 
 class AgentResponse(BaseModel):
     reply: str = Field(..., description="The natural language response to the user.")
