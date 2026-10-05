@@ -12,15 +12,15 @@ async def search_inventory(
     condition: str | None = None,
     price: float | None = None
 ) -> str:
-    """Search for items in your resale inventory.
+    """Searches for clothing items in the inventory. 
+    CRITICAL: If the user wants to see all items or general stock, call this tool with NO arguments (all parameters as None) to retrieve the complete inventory list.
 
     Args:
-        name (str, optional): The specific name or title of the item.
-        category (str, optional): The category of the item (e.g., T-Shirt, Trousers, Coat, Shoes, Accessory).
-        brand (str, optional): The brand of the item (e.g., Nike, Asics).
-        size (str, optional): The size of the item.
-        condition (str, optional): The physical condition of the item.
-        price (float, optional): The exact price of the item saved in the database.
+        name (str, optional): Filter by item name.
+        category (str, optional): Filter by category.
+        brand (str, optional): Filter by brand.
+        size (str, optional): Filter by size.
+        condition (str, optional): Filter by condition.
     """
     query = {}
     if name:

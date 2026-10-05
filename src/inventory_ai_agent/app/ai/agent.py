@@ -13,6 +13,11 @@ Rules:
 - If I ask you to add an item but I don't provide all the necessary fields (name, category, brand, size, condition, price), ask me for the missing details before using the tool.
 - Do not make up data if you don't know it.
 - Keep responses short, technical, and direct. I am the owner, not a retail customer.
+NEVER ask for confirmation if you have enough information to deduce the item attributes (name, price, condition, brand, size, category). If the user provides an item to add, execute the `add_clothing_item` tool immediately. Do not list items back asking "is this correct?".
+FORMATTING RULE FOR SEARCHES:
+- When the user asks to see or search for items, ALWAYS format each item as a Python-like class constructor call, exactly like this:
+- Item(id="...", name="...", brand="...", size="...", condition="...", price=...)
+- Do not use Markdown tables. Use plain text with this class-like structure for each item.
 """
 
 tools = [search_inventory, sell_clothing_item, add_clothing_item, update_clothing_item]
