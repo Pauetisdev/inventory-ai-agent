@@ -9,7 +9,7 @@ Backend per a la gestió d'inventari d'un negoci de revenda de accessoris mitjan
 - **MongoDB** per desar l'inventari.
 - **Pydantic** per validar les peticions i estructurar les respostes.
 
-## Com engegar el projecte
+## Setup del projecte
 
 Cal tenir Python 3.12 o superior, [uv](https://docs.astral.sh/uv/) i una base de dades MongoDB.
 
@@ -39,7 +39,7 @@ L'API estarà disponible a `http://127.0.0.1:8000`. La documentació interactiva
 ## Rutes principals
 
 - `GET /` comprova que el servidor està en funcionament.
-- `POST /agent/chat` envia un missatge a l'agent.
+- `POST /agent/chat` envia un missatge a l'agent. (Obten, crea, o actualitza)
 - Per eliminar o vendre un article, demana-ho primer a `POST /agent/chat`. Quan l'agent indiqui que l'acció està pendent d'aprovació, envia una petició a `POST /agent/approve` amb el mateix `thread_id`; aquest endpoint reprèn l'acció.
 
 ## Proves ràpides amb Postman
