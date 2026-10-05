@@ -1,7 +1,9 @@
 from langchain.agents import create_agent
+from langchain.agents.structured_output import ResponseFormat
 from langgraph.checkpoint.memory import InMemorySaver
 from inventory_ai_agent.app.ai.tools import search_inventory, sell_clothing_item, add_clothing_item, update_clothing_item
 from langchain.agents.middleware import HumanInTheLoopMiddleware
+from inventory_ai_agent.app.models.requests import AgentResponse
 
 SYSTEM_PROMPT = """You are the personal backend inventory manager for my resale clothing business.
 Rules:
@@ -25,4 +27,5 @@ agent = create_agent(
             interrupt_on={"sell_clothing_item": {"allowed_decisions": ["approve", "reject"]}},
         ),
     ],
+    response_format= AgentResponse
 )
