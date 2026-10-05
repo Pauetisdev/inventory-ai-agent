@@ -1,6 +1,6 @@
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import InMemorySaver
-from inventory_ai_agent.app.ai.tools import search_inventory, sell_clothing_item, add_clothing_item
+from inventory_ai_agent.app.ai.tools import search_inventory, sell_clothing_item, add_clothing_item, update_clothing_item
 from langchain.agents.middleware import HumanInTheLoopMiddleware
 
 SYSTEM_PROMPT = """You are the personal backend inventory manager for my resale clothing business.
@@ -13,7 +13,7 @@ Rules:
 - Keep responses short, technical, and direct. I am the owner, not a retail customer.
 """
 
-tools = [search_inventory, sell_clothing_item, add_clothing_item]
+tools = [search_inventory, sell_clothing_item, add_clothing_item, update_clothing_item]
 
 agent = create_agent(
     model="openai:gpt-4o-mini",
