@@ -1,6 +1,6 @@
 # Gestió d'inventari amb IA
 
-Backend per gestionar l'inventari d'una botiga de roba amb instruccions en llenguatge natural. L'agent pot consultar, afegir i modificar articles, i iniciar accions de venda amb revisió humana. Les dades es desen a MongoDB.
+Backend per a la gestió d'inventari d'un negoci de revenda de accessoris mitjançant instruccions en llenguatge natural. L'agent permet consultar, afegir i controlar l'estoc de manera ràpida i automatitzada, incloent fluxos de revisió humana per a les operacions. Les dades s'emmagatzemen a MongoDB.
 
 ## Tecnologies
 
