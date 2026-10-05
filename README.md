@@ -5,7 +5,7 @@ Backend per a la gestió d'inventari d'un negoci de revenda de accessoris mitjan
 ## Tecnologies
 
 - **FastAPI** per a l'API.
-- **LangGraph** i **OpenAI** per gestionar les converses i les accions de l'agent.
+- **LangChain (amb LangGraph)** i **OpenAI** per gestionar les converses i les accions de l'agent.
 - **MongoDB** per desar l'inventari.
 - **Pydantic** per validar les peticions i estructurar les respostes.
 
